@@ -3,3 +3,24 @@
 
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 
+#include "AbilitySystem/ThroneAbilitySystemComponent.h"
+#include "AbilitySystem/Abilities/ThroneGameplayAbility.h"
+#include "ThroneTypes/ThroneStructTypes.h"
+
+void UDataAsset_HeroStartUpData::GiveToAbilitySystemComponent(UThroneAbilitySystemComponent* InASCToGive,
+	int32 ApplyLevel) const
+{
+	Super::GiveToAbilitySystemComponent(InASCToGive, ApplyLevel);
+	
+	for (const FThroneHeroAbilitySet& AbilitySet : HeroStartUpAbilitySets)
+	{
+		if (!AbilitySet.IsValid()) continue;
+		
+		FGameplayAbilitySpec AbilitySpec(AbilitySet.AbilityToGrant);
+		AbilitySpec.SourceObject = InASCToGive->GetAvatarActor();
+		AbilitySpec.Level = ApplyLevel;
+		AbilitySpec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);
+		
+		InASCToGive->GiveAbility(AbilitySpec);
+	}
+}

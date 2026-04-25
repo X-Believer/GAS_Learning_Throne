@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "ThroneAbilitySystemComponent.generated.h"
 
+struct FThroneHeroAbilitySet;
 /**
  * 
  */
@@ -14,4 +15,11 @@ class THRONE_API UThroneAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 	
+public:
+	void OnAbilityInputPressed(const FGameplayTag& InInputTag);
+	void OnAbilityInputReleased(const FGameplayTag& InInputTag);
+	void OnAbilityInputHeld(const FGameplayTag& InInputTag);
+	
+	UFUNCTION(BlueprintCallable, Category = "Throne|Ability", meta=(ApplyLevel="1"))
+	void GrantHeroWeaponAbilities(const TArray<FThroneHeroAbilitySet>& InDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilityHandles);
 };

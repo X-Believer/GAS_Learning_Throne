@@ -26,5 +26,5 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="StartUpData")
 	TArray<TSubclassOf<UThroneGameplayAbility>> ReactiveAbilities;
 	
-	void GrantAbilities(const TArray<TSubclassOf<UThroneGameplayAbility>>& InAbilitiesToGive, UThroneAbilitySystemComponent* InThroneASCToGive, int32 ApplyLevel = 1) const;
+	void GrantAbilities(const TArray<TSubclassOf<UThroneGameplayAbility>>& InAbilitiesToGive, UThroneAbilitySystemComponent* InAscToGive, int32 ApplyLevel = 1) const;
 };

@@ -4,6 +4,7 @@
 #include "AbilitySystem/Abilities/ThroneGameplayAbility.h"
 
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
+#include "Components/Combat/PawnCombatComponent.h"
 
 void UThroneGameplayAbility::OnGiveAbility(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
@@ -31,4 +32,14 @@ void UThroneGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle,
 			ActorInfo->AbilitySystemComponent->ClearAbility(Handle);
 		}
 	}
+}
+
+UPawnCombatComponent* UThroneGameplayAbility::GetPawnCombatComponentFromActorInfo() const
+{
+	return GetAvatarActorFromActorInfo()->FindComponentByClass<UPawnCombatComponent>();
+}
+
+UThroneAbilitySystemComponent* UThroneGameplayAbility::GetThroneAbilitySystemComponentFromActorInfo() const
+{
+	return Cast<UThroneAbilitySystemComponent>(CurrentActorInfo->AbilitySystemComponent);
 }

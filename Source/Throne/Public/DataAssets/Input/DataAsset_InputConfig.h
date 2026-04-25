@@ -22,6 +22,11 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<UInputAction> InputAction;
+	
+	bool IsValid() const
+	{
+		return InputTag.IsValid() && InputAction != nullptr;
+	}
 };
 /**
  * 
@@ -38,5 +43,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(TitleProperty="InputTag"))
 	TArray<FThroneInputActionConfig> NativeInputActions;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(TitleProperty="InputTag"))
+	TArray<FThroneInputActionConfig> AbilityInputActions;
+	
+	UFUNCTION()
 	UInputAction* FindNativeInputActionByTag(const FGameplayTag& InInputTag) const;
 };

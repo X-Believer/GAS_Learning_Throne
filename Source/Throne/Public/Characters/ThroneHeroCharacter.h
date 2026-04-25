@@ -6,6 +6,8 @@
 #include "Characters/ThroneBaseCharacter.h"
 #include "ThroneHeroCharacter.generated.h"
 
+struct FGameplayTag;
+class UHeroCombatComponent;
 struct FInputActionValue;
 class UDataAsset_InputConfig;
 class UCameraComponent;
@@ -34,10 +36,13 @@ private:
 #pragma region Components
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom;
+	TObjectPtr<USpringArmComponent> CameraBoom;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FollowCamera;
+	TObjectPtr<UCameraComponent> FollowCamera;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UHeroCombatComponent> HeroCombatComponent;
 	
 #pragma endregion
 	
@@ -48,7 +53,13 @@ private:
 	
 	void Input_Move(const FInputActionValue& InputActionValue);
 	void Input_Look(const FInputActionValue& InputActionValue);
+	void Input_AbilityInputPressed(const FGameplayTag InInputTag);
+	void Input_AbilityInputReleased(const FGameplayTag InInputTag);
+	void Input_AbilityInputHeld(const FGameplayTag InInputTag);
 	
 #pragma endregion
+	
+public:
+	FORCEINLINE UHeroCombatComponent* GetHeroCombatComponent() const { return HeroCombatComponent; }
 	
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Items/Weapons/ThroneWeaponBase.h"
+#include "ThroneTypes/ThroneStructTypes.h"
 #include "ThroneHeroWeapon.generated.h"
 
 /**
@@ -14,4 +15,7 @@ class THRONE_API AThroneHeroWeapon : public AThroneWeaponBase
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WeaponData")
+	FThroneHeroWeaponData HeroWeaponData;
 };

@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "ThroneBaseCharacter.generated.h"
 
+class UDataAsset_StartUpDataBase;
 class UThroneAttributeSet;
 class UThroneAbilitySystemComponent;
 

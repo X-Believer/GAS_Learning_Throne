@@ -6,6 +6,9 @@
 #include "Abilities/GameplayAbility.h"
 #include "ThroneGameplayAbility.generated.h"
 
+class UThroneAbilitySystemComponent;
+class UPawnCombatComponent;
+
 UENUM()
 enum class EThroneAbilityActivationPolicy : uint8
 {
@@ -27,6 +30,12 @@ protected:
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	//~ End UGameplayAbility interface
 	
-	UPROPERTY(EditDefaultsOnly, Category="ThroneAbility")
+	UPROPERTY(EditDefaultsOnly, Category="Throne|Ability")
 	EThroneAbilityActivationPolicy AbilityActivationPolicy = EThroneAbilityActivationPolicy::OnTriggered;
+	
+	UFUNCTION(BlueprintPure, Category="Throne|Ability")
+	UPawnCombatComponent* GetPawnCombatComponentFromActorInfo() const;
+	
+	UFUNCTION(BlueprintPure, Category="Throne|Ability")
+	UThroneAbilitySystemComponent* GetThroneAbilitySystemComponentFromActorInfo() const;
 };

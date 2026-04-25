@@ -9,6 +9,7 @@
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/Combat/HeroCombatComponent.h"
 #include "Components/Input/ThroneInputComponent.h"
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
@@ -37,6 +38,8 @@ AThroneHeroCharacter::AThroneHeroCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
 	GetCharacterMovement()->MaxWalkSpeed = 400.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+	
+	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
 }
 
 void AThroneHeroCharacter::PossessedBy(AController* NewController)
@@ -68,6 +71,8 @@ void AThroneHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	UThroneInputComponent* ThroneInputComponent = CastChecked<UThroneInputComponent>(PlayerInputComponent);
 	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &AThroneHeroCharacter::Input_Move);
 	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &AThroneHeroCharacter::Input_Look);
+	
+	ThroneInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &AThroneHeroCharacter::Input_AbilityInputPressed, &AThroneHeroCharacter::Input_AbilityInputReleased, &AThroneHeroCharacter::Input_AbilityInputHeld);
 }
 
 void AThroneHeroCharacter::BeginPlay()
@@ -101,4 +106,19 @@ void AThroneHeroCharacter::Input_Look(const FInputActionValue& InputActionValue)
 	}
 	AddControllerYawInput(LookAxisVector.X);
 	AddControllerPitchInput(LookAxisVector.Y);
+}
+
+void AThroneHeroCharacter::Input_AbilityInputPressed(const FGameplayTag InInputTag)
+{
+	ThroneAbilitySystemComponent->OnAbilityInputPressed(InInputTag);
+}
+
+void AThroneHeroCharacter::Input_AbilityInputReleased(const FGameplayTag InInputTag)
+{
+	ThroneAbilitySystemComponent->OnAbilityInputReleased(InInputTag);
+}
+
+void AThroneHeroCharacter::Input_AbilityInputHeld(const FGameplayTag InInputTag)
+{
+	ThroneAbilitySystemComponent->OnAbilityInputHeld(InInputTag);
 }
