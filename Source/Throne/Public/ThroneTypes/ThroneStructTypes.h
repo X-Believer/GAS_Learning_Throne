@@ -4,8 +4,8 @@
 #include "GameplayTagContainer.h"
 #include "ThroneStructTypes.generated.h"
 
+class UThroneHeroGameplayAbility;
 class UInputMappingContext;
-class UThroneGameplayAbility;
 class UThroneHeroLinkedAnimLayer;
 
 USTRUCT(BlueprintType)
@@ -17,7 +17,7 @@ struct FThroneHeroAbilitySet
 	FGameplayTag InputTag;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UThroneGameplayAbility> AbilityToGrant;
+	TSubclassOf<UThroneHeroGameplayAbility> AbilityToGrant;
 	
 	bool IsValid() const;
 };

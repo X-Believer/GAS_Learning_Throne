@@ -24,4 +24,6 @@ namespace ThroneGameplayTags
 	
 	UE_DEFINE_GAMEPLAY_TAG(PlayerTag_Event_Equip_Melee, "PlayerTag.Event.Equip.Melee");
 	UE_DEFINE_GAMEPLAY_TAG(PlayerTag_Event_Unequip_Melee, "PlayerTag.Event.Unequip.Melee");
+	
+	UE_DEFINE_GAMEPLAY_TAG(PlayerTag_Status_JumpToFinisher, "PlayerTag.Status.JumpToFinisher");
 }

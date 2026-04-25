@@ -25,4 +25,6 @@ namespace ThroneGameplayTags
 	
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(PlayerTag_Event_Equip_Melee);
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(PlayerTag_Event_Unequip_Melee);
+	
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(PlayerTag_Status_JumpToFinisher);
 }

@@ -2,7 +2,7 @@
 
 
 #include "ThroneTypes/ThroneStructTypes.h"
-#include "AbilitySystem/Abilities/ThroneGameplayAbility.h"
+#include "AbilitySystem/Abilities/ThroneHeroGameplayAbility.h"
 
 bool FThroneHeroAbilitySet::IsValid() const
 {
