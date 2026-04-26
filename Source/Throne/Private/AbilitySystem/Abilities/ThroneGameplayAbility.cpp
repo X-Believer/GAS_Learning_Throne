@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/Abilities/ThroneGameplayAbility.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Components/Combat/PawnCombatComponent.h"
 
@@ -42,4 +43,23 @@ UPawnCombatComponent* UThroneGameplayAbility::GetPawnCombatComponentFromActorInf
 UThroneAbilitySystemComponent* UThroneGameplayAbility::GetThroneAbilitySystemComponentFromActorInfo() const
 {
 	return Cast<UThroneAbilitySystemComponent>(CurrentActorInfo->AbilitySystemComponent);
+}
+
+FActiveGameplayEffectHandle UThroneGameplayAbility::NativeApplyEffectSpecHandleToTarget(AActor* Target,
+	const FGameplayEffectSpecHandle& InSpecHandle) const
+{
+	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target);
+	check(TargetASC && InSpecHandle.IsValid());
+	
+	return GetThroneAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(
+		*InSpecHandle.Data, 
+		TargetASC);
+}
+
+FActiveGameplayEffectHandle UThroneGameplayAbility::BP_ApplyEffectSpecHandleToTarget(AActor* Target,
+	const FGameplayEffectSpecHandle& InSpecHandle, EThroneSuccessType& SuccessType)
+{
+	const FActiveGameplayEffectHandle ActiveGameplayEffectHandle = NativeApplyEffectSpecHandleToTarget(Target, InSpecHandle);
+	SuccessType = ActiveGameplayEffectHandle.WasSuccessfullyApplied() ? EThroneSuccessType::Success : EThroneSuccessType::Failure;
+	return ActiveGameplayEffectHandle;
 }

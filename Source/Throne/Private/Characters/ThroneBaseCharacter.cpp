@@ -24,6 +24,11 @@ UAbilitySystemComponent* AThroneBaseCharacter::GetAbilitySystemComponent() const
 	return GetThroneAbilitySystemComponent();
 }
 
+UPawnCombatComponent* AThroneBaseCharacter::GetPawnCombatComponent() const
+{
+	return nullptr;
+}
+
 void AThroneBaseCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);

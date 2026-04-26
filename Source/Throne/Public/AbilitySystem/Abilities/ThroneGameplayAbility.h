@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "ThroneTypes/ThroneEnumTypes.h"
 #include "ThroneGameplayAbility.generated.h"
 
 class UThroneAbilitySystemComponent;
@@ -38,4 +39,9 @@ protected:
 	
 	UFUNCTION(BlueprintPure, Category="Throne|Ability")
 	UThroneAbilitySystemComponent* GetThroneAbilitySystemComponentFromActorInfo() const;
+	
+	FActiveGameplayEffectHandle NativeApplyEffectSpecHandleToTarget(AActor* Target, const FGameplayEffectSpecHandle& InSpecHandle) const;
+	
+	UFUNCTION(BlueprintCallable, Category="Throne|Ability", meta=(DisplayName="ApplyGameplayEffectSpecHandleToTarget",ExpandEnumAsExecs="SuccessType"))
+	FActiveGameplayEffectHandle BP_ApplyEffectSpecHandleToTarget(AActor* Target, const FGameplayEffectSpecHandle& InSpecHandle, EThroneSuccessType& SuccessType);
 };

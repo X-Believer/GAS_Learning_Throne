@@ -5,6 +5,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
+#include "Characters/ThroneBaseCharacter.h"
 
 UThroneAbilitySystemComponent* UThroneFunctionLibrary::NativeGetThroneASCFromActor(AActor* InActor)
 {
@@ -44,4 +45,24 @@ void UThroneFunctionLibrary::BP_DoesActorHasTag(AActor* InActor, FGameplayTag Ta
 	EThroneConfirmType& ConfirmType)
 {
 	NativeDoesActorHasTag(InActor, TagToCheck) ? ConfirmType = EThroneConfirmType::Yes : ConfirmType = EThroneConfirmType::No;
+}
+
+UPawnCombatComponent* UThroneFunctionLibrary::NativeGetPawnCombatComponentFromActor(AActor* InActor)
+{
+	check(InActor);
+	
+	if (const IPawnCombatInterface* PawnCombatInterface = Cast<IPawnCombatInterface>(InActor))
+	{
+		return PawnCombatInterface->GetPawnCombatComponent();
+	}
+
+	return nullptr;
+}
+
+UPawnCombatComponent* UThroneFunctionLibrary::BP_GetPawnCombatComponentFromActor(AActor* InActor,
+	EThroneValidType& ValidType)
+{
+	UPawnCombatComponent* PawnCombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
+	ValidType = PawnCombatComponent ? EThroneValidType::Valid : EThroneValidType::Invalid;
+	return PawnCombatComponent;
 }

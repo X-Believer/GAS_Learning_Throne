@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/ThroneHeroGameplayAbility.h"
 
+#include "ThroneGameplayTags.h"
+#include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Characters/ThroneHeroCharacter.h"
 #include "Controllers/ThroneHeroController.h"
 
@@ -29,4 +31,33 @@ AThroneHeroController* UThroneHeroGameplayAbility::GetHeroControllerFromActorInf
 UHeroCombatComponent* UThroneHeroGameplayAbility::GetHeroCombatComponentFromActorInfo()
 {
 	return GetHeroCharacterFromActorInfo()->GetHeroCombatComponent();
+}
+
+FGameplayEffectSpecHandle UThroneHeroGameplayAbility::MakeHeroDamageEffectSpecHandle(
+	TSubclassOf<UGameplayEffect> DamageEffect, float InWeaponBaseDamage, FGameplayTag AttackTypeTag, int32 InComboCount)
+{
+	check(DamageEffect);
+	
+	FGameplayEffectContextHandle ContextHandle = GetThroneAbilitySystemComponentFromActorInfo()->MakeEffectContext();
+	ContextHandle.SetAbility(this);
+	ContextHandle.AddSourceObject(GetAvatarActorFromActorInfo());
+	ContextHandle.AddInstigator(GetAvatarActorFromActorInfo(), GetAvatarActorFromActorInfo());
+	
+	FGameplayEffectSpecHandle EffectSpecHandle = GetThroneAbilitySystemComponentFromActorInfo()->MakeOutgoingSpec(
+		DamageEffect,
+		GetAbilityLevel(),
+		ContextHandle);
+	
+	EffectSpecHandle.Data->SetSetByCallerMagnitude(
+		ThroneGameplayTags::Shared_SetByCaller_BaseDamage, 
+		InWeaponBaseDamage);
+	
+	if (AttackTypeTag.IsValid())
+	{
+		EffectSpecHandle.Data->SetSetByCallerMagnitude(
+			AttackTypeTag, 
+			InComboCount);
+	}
+	
+	return EffectSpecHandle;
 }

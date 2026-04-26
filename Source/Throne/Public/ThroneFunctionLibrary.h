@@ -4,17 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "ThroneTypes/ThroneEnumTypes.h"
 #include "ThroneFunctionLibrary.generated.h"
 
+class UPawnCombatComponent;
 struct FGameplayTag;
 class UThroneAbilitySystemComponent;
-
-UENUM()
-enum class EThroneConfirmType : uint8
-{
-	Yes,
-	No
-};
 
 /**
  * 
@@ -35,6 +30,11 @@ public:
 	
 	static bool NativeDoesActorHasTag(AActor* InActor, FGameplayTag TagToCheck);
 	
-	UFUNCTION(BlueprintCallable, Category = "Throne|FunctionLibrary", meta = (DisplayName="Does Actor Has Tag", ExpandEnumAsExecs="ConfirmType"))
+	UFUNCTION(BlueprintCallable, Category = "Throne|FunctionLibrary", meta = (DisplayName="DoesActorHasTag", ExpandEnumAsExecs="ConfirmType"))
 	static void BP_DoesActorHasTag(AActor* InActor, FGameplayTag TagToCheck, EThroneConfirmType& ConfirmType);
+	
+	static UPawnCombatComponent* NativeGetPawnCombatComponentFromActor(AActor* InActor);
+	
+	UFUNCTION(BlueprintCallable, Category = "Throne|FunctionLibrary", meta = (DisplayName = "GetPawnCombatComponentFromActor", ExpandEnumAsExecs="ValidType"))
+	static UPawnCombatComponent* BP_GetPawnCombatComponentFromActor(AActor* InActor, EThroneValidType& ValidType);
 };

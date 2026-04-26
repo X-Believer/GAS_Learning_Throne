@@ -8,6 +8,14 @@
 #include "PawnCombatComponent.generated.h"
 
 class AThroneWeaponBase;
+
+UENUM(BlueprintType)
+enum class EToggleDamageType : uint8
+{
+	CurrentEquippedWeapon,
+	LeftHand,
+	RightHand
+};
 /**
  * 
  */
@@ -28,6 +36,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Throne|Combat")
 	FGameplayTag CurrentEquippedWeaponTag;
 	
+	UFUNCTION(BlueprintCallable, Category = "Throne|Combat")
+	void ToggleWeaponCollision(bool bShouldToggle, EToggleDamageType ToggleDamageType = EToggleDamageType::CurrentEquippedWeapon);
+	
+	virtual void OnWeaponHitTargetActor(AActor* OtherActor);
+	virtual void OnWeaponEndHitTargetActor(AActor* OtherActor);
+	
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Throne|Combat")
+	TArray<AActor*> OverlappedActors;
 	
 private:
 	UPROPERTY()

@@ -18,4 +18,13 @@ class THRONE_API UHeroCombatComponent : public UPawnCombatComponent
 public:
 	UFUNCTION(BlueprintCallable, Category="Throne|Combat")
 	AThroneHeroWeapon* GetHeroCarriedWeaponByTag(FGameplayTag InWeaponTag) const;
+	
+	UFUNCTION(BlueprintCallable, Category="Throne|Combat")
+	AThroneHeroWeapon* GetHeroCurrentEquippedWeapon() const;
+	
+	UFUNCTION(BlueprintCallable, Category="Throne|Combat")
+	float GetHeroCurrentEquippedWeaponDamageAtLevel(float InLevel) const;
+	
+	virtual void OnWeaponHitTargetActor(AActor* OtherActor) override;
+	virtual void OnWeaponEndHitTargetActor(AActor* OtherActor) override;
 };

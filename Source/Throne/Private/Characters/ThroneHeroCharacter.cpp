@@ -55,6 +55,11 @@ void AThroneHeroCharacter::PossessedBy(AController* NewController)
 	}
 }
 
+UPawnCombatComponent* AThroneHeroCharacter::GetPawnCombatComponent() const
+{
+	return HeroCombatComponent;
+}
+
 void AThroneHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	checkf(InputConfigDataAsset, TEXT("InputConfigDataAsset is null!"));

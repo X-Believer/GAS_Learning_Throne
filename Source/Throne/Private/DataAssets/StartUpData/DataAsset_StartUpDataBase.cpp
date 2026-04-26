@@ -14,6 +14,23 @@ void UDataAsset_StartUpDataBase::GiveToAbilitySystemComponent(UThroneAbilitySyst
 	
 	GrantAbilities(ActivateOnGivenAbilities, InASCToGive, ApplyLevel);
 	GrantAbilities(ReactiveAbilities, InASCToGive, ApplyLevel);
+	
+	if (!StartUpGameplayEffects.IsEmpty())
+	{
+		for (const TSubclassOf<UGameplayEffect>& GameplayEffect : StartUpGameplayEffects)
+		{
+			if (!GameplayEffect) continue;
+			
+			FGameplayEffectContextHandle EffectContext = InASCToGive->MakeEffectContext();
+			EffectContext.AddSourceObject(this);
+			
+			FGameplayEffectSpecHandle SpecHandle = InASCToGive->MakeOutgoingSpec(GameplayEffect, ApplyLevel, EffectContext);
+			if (SpecHandle.IsValid())
+			{
+				InASCToGive->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
+			}
+		}
+	}
 }
 
 void UDataAsset_StartUpDataBase::GrantAbilities(const TArray<TSubclassOf<UThroneGameplayAbility>>& InAbilitiesToGive,

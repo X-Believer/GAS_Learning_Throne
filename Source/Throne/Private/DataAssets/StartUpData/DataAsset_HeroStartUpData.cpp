@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "AbilitySystem/Abilities/ThroneGameplayAbility.h"
+#include "AbilitySystem/Abilities/ThroneHeroGameplayAbility.h"
 #include "ThroneTypes/ThroneStructTypes.h"
 
 void UDataAsset_HeroStartUpData::GiveToAbilitySystemComponent(UThroneAbilitySystemComponent* InASCToGive,
@@ -16,7 +17,7 @@ void UDataAsset_HeroStartUpData::GiveToAbilitySystemComponent(UThroneAbilitySyst
 	{
 		if (!AbilitySet.IsValid()) continue;
 		
-		FGameplayAbilitySpec AbilitySpec(AbilitySet.AbilityToGrant);
+		FGameplayAbilitySpec AbilitySpec((AbilitySet.AbilityToGrant.Get()));
 		AbilitySpec.SourceObject = InASCToGive->GetAvatarActor();
 		AbilitySpec.Level = ApplyLevel;
 		AbilitySpec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);
