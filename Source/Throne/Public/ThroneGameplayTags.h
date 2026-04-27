@@ -41,9 +41,12 @@ namespace ThroneGameplayTags
 	
 	/* Shared Tags*/
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Ability_HitReact);
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Ability_Death);
 	
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Event_MeleeHit);
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Event_HitReact);
 	
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_SetByCaller_BaseDamage);
+	
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Status_Death);
 }

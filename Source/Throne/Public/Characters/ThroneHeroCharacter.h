@@ -6,6 +6,7 @@
 #include "Characters/ThroneBaseCharacter.h"
 #include "ThroneHeroCharacter.generated.h"
 
+class UHeroUIComponent;
 struct FGameplayTag;
 class UHeroCombatComponent;
 struct FInputActionValue;
@@ -28,9 +29,15 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	//~ End APawn Interface
 	
-	//~ Begin PawnCombatInterface Interface
+	//~ Begin PawnCombatInterface 
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
-	//~ End PawnCombatInterface Interface
+	//~ End PawnCombatInterface 
+	
+	//~ Begin PawnUIInterface 
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	virtual UHeroUIComponent* GetHeroUIComponent() const override;
+	//~ End PawnUIInterface 
+	
 	
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;
@@ -47,6 +54,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UHeroCombatComponent> HeroCombatComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UHeroUIComponent> HeroUIComponent;
 	
 #pragma endregion
 	

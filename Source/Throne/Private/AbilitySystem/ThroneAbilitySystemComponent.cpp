@@ -4,6 +4,7 @@
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 
 #include "AbilitySystem/Abilities/ThroneGameplayAbility.h"
+#include "AbilitySystem/Abilities/ThroneHeroGameplayAbility.h"
 #include "ThroneTypes/ThroneStructTypes.h"
 
 void UThroneAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& InInputTag)
@@ -35,11 +36,25 @@ void UThroneAbilitySystemComponent::GrantHeroWeaponAbilities(
 	{
 		if (!AbilitySet.IsValid()) continue;
 		
-		FGameplayAbilitySpec AbilitySpec(AbilitySet.AbilityToGrant);
+		FGameplayAbilitySpec AbilitySpec((AbilitySet.AbilityToGrant.Get()));
 		AbilitySpec.SourceObject = GetAvatarActor();
 		AbilitySpec.Level = ApplyLevel;
 		AbilitySpec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);
 		
 		OutGrantedAbilityHandles.AddUnique(GiveAbility(AbilitySpec));
 	}
+}
+
+void UThroneAbilitySystemComponent::RemoveGrantedHeroWeaponAbilities(
+	TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove)
+{
+	if (InSpecHandlesToRemove.IsEmpty()) return;
+	
+	for (const FGameplayAbilitySpecHandle& SpecHandle : InSpecHandlesToRemove)
+	{
+		if (!SpecHandle.IsValid()) continue;
+		ClearAbility(SpecHandle);
+	}
+	
+	InSpecHandlesToRemove.Empty();
 }

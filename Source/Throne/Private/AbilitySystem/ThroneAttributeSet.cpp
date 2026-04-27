@@ -4,7 +4,10 @@
 #include "AbilitySystem/ThroneAttributeSet.h"
 
 #include "GameplayEffectExtension.h"
-#include "ThroneDebugHelper.h"
+#include "ThroneFunctionLibrary.h"
+#include "ThroneGameplayTags.h"
+#include "Components/UI/HeroUIComponent.h"
+#include "Interfaces/PawnUIInterface.h"
 
 UThroneAttributeSet::UThroneAttributeSet()
 {
@@ -20,17 +23,32 @@ UThroneAttributeSet::UThroneAttributeSet()
 void UThroneAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
+	if (!CachedPawnUIInterface.IsValid())
+	{
+		CachedPawnUIInterface = TWeakInterfacePtr<IPawnUIInterface>(Data.Target.GetAvatarActor());
+	}
+	checkf(CachedPawnUIInterface.IsValid(), TEXT("CachedPawnUIInterface is not valid in UThroneAttributeSet::PostGameplayEffectExecute"));
+
+	const UPawnUIComponent* PawnUIComponent = CachedPawnUIInterface->GetPawnUIComponent();
+	checkf(PawnUIComponent, TEXT("PawnUIComponent is not valid in UThroneAttributeSet::PostGameplayEffectExecute"));
 	
 	if (Data.EvaluatedData.Attribute == GetCurrentHealthAttribute())
 	{
 		const float NewHealth = FMath::Clamp(GetCurrentHealth(), 0.f, GetMaxHealth());
 		SetCurrentHealth(NewHealth);
+		
+		PawnUIComponent->OnCurrentHealthChanged.Broadcast(GetCurrentHealth() / GetMaxHealth());
 	}
 	
 	if (Data.EvaluatedData.Attribute == GetCurrentRageAttribute())
 	{
 		const float NewRage = FMath::Clamp(GetCurrentRage(), 0.f, GetMaxRage());
 		SetCurrentRage(NewRage);
+		
+		if (const UHeroUIComponent* HeroUIComponent = CachedPawnUIInterface->GetHeroUIComponent())
+		{
+			HeroUIComponent->OnCurrentRageChanged.Broadcast(GetCurrentRage() / GetMaxRage());
+		}
 	}
 	
 	if (Data.EvaluatedData.Attribute == GetDamageTakenAttribute())
@@ -41,11 +59,11 @@ void UThroneAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffect
 		const float NewHealth = FMath::Clamp(OldHealth - InDamageTaken, 0.f, GetMaxHealth());
 		SetCurrentHealth(NewHealth);
 		
-		Debug::Print("Damage Taken", InDamageTaken, FColor::Red);
-		Debug::Print("New Health", NewHealth, FColor::Red);
+		PawnUIComponent->OnCurrentHealthChanged.Broadcast(GetCurrentHealth() / GetMaxHealth());
 		
-		//TODO: Notify UI
-		
-		//TODO: Handle Death
+		if (GetCurrentHealth() <= 0.f)
+		{
+			UThroneFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), ThroneGameplayTags::Shared_Status_Death);
+		}
 	}
 }

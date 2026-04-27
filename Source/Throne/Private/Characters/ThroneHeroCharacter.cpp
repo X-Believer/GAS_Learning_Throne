@@ -1,16 +1,15 @@
 // Copyright (c) 2026 Shuyang Xing. All rights reserved.
 
 #include "Characters/ThroneHeroCharacter.h"
-
 #include "EnhancedInputSubsystemInterface.h"
 #include "EnhancedInputSubsystems.h"
-#include "ThroneDebugHelper.h"
 #include "ThroneGameplayTags.h"
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/Combat/HeroCombatComponent.h"
 #include "Components/Input/ThroneInputComponent.h"
+#include "Components/UI/HeroUIComponent.h"
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -40,6 +39,7 @@ AThroneHeroCharacter::AThroneHeroCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
+	HeroUIComponent = CreateDefaultSubobject<UHeroUIComponent>(TEXT("HeroUIComponent"));
 }
 
 void AThroneHeroCharacter::PossessedBy(AController* NewController)
@@ -58,6 +58,16 @@ void AThroneHeroCharacter::PossessedBy(AController* NewController)
 UPawnCombatComponent* AThroneHeroCharacter::GetPawnCombatComponent() const
 {
 	return HeroCombatComponent;
+}
+
+UPawnUIComponent* AThroneHeroCharacter::GetPawnUIComponent() const
+{
+	return HeroUIComponent;
+}
+
+UHeroUIComponent* AThroneHeroCharacter::GetHeroUIComponent() const
+{
+	return HeroUIComponent;
 }
 
 void AThroneHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

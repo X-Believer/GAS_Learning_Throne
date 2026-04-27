@@ -6,6 +6,7 @@
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/PawnCombatInterface.h"
+#include "Interfaces/PawnUIInterface.h"
 #include "ThroneBaseCharacter.generated.h"
 
 class UDataAsset_StartUpDataBase;
@@ -13,22 +14,25 @@ class UThroneAttributeSet;
 class UThroneAbilitySystemComponent;
 
 UCLASS()
-class THRONE_API AThroneBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface
+class THRONE_API AThroneBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface, public IPawnUIInterface
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AThroneBaseCharacter();
 	
-	//~ Begin IAbilitySystemInterface Interface
+	//~ Begin IAbilitySystemInterface 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	//~ End IAbilitySystemInterface Interface
+	//~ End IAbilitySystemInterface 
 	
-	//~ Begin PawnCombatInterface Interface
+	//~ Begin PawnCombatInterface 
 	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
-	//~ End PawnCombatInterface Interface
+	//~ End PawnCombatInterface 
 	
+	//~ Begin PawnUIInterface 
+	virtual UPawnUIComponent* GetPawnUIComponent() const override;
+	//~ End PawnUIInterface
+
 protected:
 	//~ Begin APawn Interface
 	virtual void PossessedBy(AController* NewController) override;

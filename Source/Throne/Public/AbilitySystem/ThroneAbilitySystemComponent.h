@@ -22,4 +22,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Throne|Ability", meta=(ApplyLevel="1"))
 	void GrantHeroWeaponAbilities(const TArray<FThroneHeroAbilitySet>& InDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilityHandles);
+	
+	UFUNCTION(BlueprintCallable, Category = "Throne|Ability")
+	void RemoveGrantedHeroWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove);
 };

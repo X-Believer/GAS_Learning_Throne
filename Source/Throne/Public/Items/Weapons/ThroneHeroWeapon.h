@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "Items/Weapons/ThroneWeaponBase.h"
 #include "ThroneTypes/ThroneStructTypes.h"
 #include "ThroneHeroWeapon.generated.h"
@@ -18,4 +19,13 @@ class THRONE_API AThroneHeroWeapon : public AThroneWeaponBase
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WeaponData")
 	FThroneHeroWeaponData HeroWeaponData;
+	
+	UFUNCTION(BlueprintCallable)
+	void AssignGrantedAbilitySpecHandle(const TArray<FGameplayAbilitySpecHandle>& InSpecHandles);
+	
+	UFUNCTION(BlueprintPure)
+	TArray<FGameplayAbilitySpecHandle> GetGrantedAbilitySpecHandles() const;
+	
+private:
+	TArray<FGameplayAbilitySpecHandle> GrantedAbilitySpecHandles;
 };

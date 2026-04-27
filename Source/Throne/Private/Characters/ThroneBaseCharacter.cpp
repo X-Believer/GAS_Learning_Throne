@@ -29,6 +29,11 @@ UPawnCombatComponent* AThroneBaseCharacter::GetPawnCombatComponent() const
 	return nullptr;
 }
 
+UPawnUIComponent* AThroneBaseCharacter::GetPawnUIComponent() const
+{
+	return nullptr;
+}
+
 void AThroneBaseCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
