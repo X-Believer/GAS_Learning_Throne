@@ -23,6 +23,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Throne|Ability")
 	UEnemyCombatComponent* GetEnemyCombatComponentFromActorInfo() const;
 	
+	UFUNCTION(BlueprintPure, Category = "Throne|Ability")
+	FGameplayEffectSpecHandle MakeEnemyDamageEffectSpecHandle(const TSubclassOf<UGameplayEffect> DamageEffect, const FScalableFloat& InDamageScalableFloat) const;
+	
 private:
 	TWeakObjectPtr<AThroneEnemyCharacter> CachedEnemyCharacter;
 };

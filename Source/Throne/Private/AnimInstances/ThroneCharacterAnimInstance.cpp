@@ -3,6 +3,7 @@
 
 #include "AnimInstances/ThroneCharacterAnimInstance.h"
 
+#include "KismetAnimationLibrary.h"
 #include "Characters/ThroneBaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -29,4 +30,6 @@ void UThroneCharacterAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSe
 	
 	GroundSpeed = OwningCharacter->GetVelocity().Size2D();
 	bHasAcceleration = !OwningMovementComponent->GetCurrentAcceleration().IsNearlyZero();
+	
+	LocomotionDirection = UKismetAnimationLibrary::CalculateDirection(OwningCharacter->GetVelocity(), OwningCharacter->GetActorRotation());
 }

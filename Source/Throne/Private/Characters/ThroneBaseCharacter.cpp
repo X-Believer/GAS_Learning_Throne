@@ -17,6 +17,7 @@ AThroneBaseCharacter::AThroneBaseCharacter()
 
 	ThroneAbilitySystemComponent = CreateDefaultSubobject<UThroneAbilitySystemComponent>(TEXT("ThroneAbilitySystemComponent"));
 	ThroneAttributeSet = CreateDefaultSubobject<UThroneAttributeSet>(TEXT("ThroneAttributeSet"));
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
 }
 
 UAbilitySystemComponent* AThroneBaseCharacter::GetAbilitySystemComponent() const

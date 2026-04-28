@@ -13,5 +13,6 @@ UCLASS()
 class THRONE_API UEnemyCombatComponent : public UPawnCombatComponent
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void OnWeaponHitTargetActor(AActor* OtherActor) override;
 };

@@ -39,6 +39,9 @@ namespace ThroneGameplayTags
 	
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(EnemyTag_Weapon);
 	
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(EnemyTag_Status_Strafing);
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(EnemyTag_Status_UnderAttack);
+	
 	/* Shared Tags*/
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Ability_HitReact);
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Ability_Death);

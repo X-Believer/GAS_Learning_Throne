@@ -3,3 +3,12 @@
 
 #include "Controllers/ThroneHeroController.h"
 
+AThroneHeroController::AThroneHeroController()
+{
+	HeroTeamId = FGenericTeamId(0);
+}
+
+FGenericTeamId AThroneHeroController::GetGenericTeamId() const
+{
+	return HeroTeamId;
+}

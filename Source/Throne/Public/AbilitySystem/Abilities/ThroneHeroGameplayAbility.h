@@ -28,7 +28,7 @@ public:
 	UHeroCombatComponent* GetHeroCombatComponentFromActorInfo();
 	
 	UFUNCTION(BlueprintPure, Category="Throne|Ability")
-	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> DamageEffect, float InWeaponBaseDamage, FGameplayTag AttackTypeTag, int32 InComboCount);
+	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> DamageEffect, float InWeaponBaseDamage, FGameplayTag AttackTypeTag, int32 InComboCount) const;
 	
 private:
 	TWeakObjectPtr<AThroneHeroCharacter> CachedHeroCharacter;

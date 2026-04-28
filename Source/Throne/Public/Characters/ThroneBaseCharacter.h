@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
+#include "MotionWarpingComponent.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/PawnCombatInterface.h"
 #include "Interfaces/PawnUIInterface.h"
@@ -43,6 +44,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	TObjectPtr<UThroneAttributeSet> ThroneAttributeSet;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MotionWarping")
+	TObjectPtr<UMotionWarpingComponent> MotionWarpingComponent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData")
 	TSoftObjectPtr<UDataAsset_StartUpDataBase> CharacterStartUpData;

@@ -34,7 +34,7 @@ UHeroCombatComponent* UThroneHeroGameplayAbility::GetHeroCombatComponentFromActo
 }
 
 FGameplayEffectSpecHandle UThroneHeroGameplayAbility::MakeHeroDamageEffectSpecHandle(
-	TSubclassOf<UGameplayEffect> DamageEffect, float InWeaponBaseDamage, FGameplayTag AttackTypeTag, int32 InComboCount)
+	const TSubclassOf<UGameplayEffect> DamageEffect, const float InWeaponBaseDamage, const FGameplayTag AttackTypeTag, const int32 InComboCount) const
 {
 	check(DamageEffect);
 	

@@ -6,6 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "ThroneBaseAnimInstance.generated.h"
 
+struct FGameplayTag;
 /**
  * 
  */
@@ -14,4 +15,7 @@ class THRONE_API UThroneBaseAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION(BlueprintPure, meta=(BlueprintThreadSafe))
+	bool DoesOwnerHaveTag(FGameplayTag TagToCheck) const;
 };

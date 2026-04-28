@@ -58,3 +58,26 @@ void UThroneAbilitySystemComponent::RemoveGrantedHeroWeaponAbilities(
 	
 	InSpecHandlesToRemove.Empty();
 }
+
+bool UThroneAbilitySystemComponent::TryActivateAbilityByTag(FGameplayTag InAbilityTag)
+{
+	check(InAbilityTag.IsValid());
+	
+	TArray<FGameplayAbilitySpec*> MatchingAbilitySpecs;
+	GetActivatableGameplayAbilitySpecsByAllMatchingTags(InAbilityTag.GetSingleTagContainer(), MatchingAbilitySpecs);
+	
+	if (!MatchingAbilitySpecs.IsEmpty())
+	{
+		const int32 RandomAbilityIndex = FMath::RandRange(0, MatchingAbilitySpecs.Num() - 1);
+		const FGameplayAbilitySpec* SpecToActivate = MatchingAbilitySpecs[RandomAbilityIndex];
+		
+		check(SpecToActivate);
+		
+		if (!SpecToActivate->IsActive())
+		{
+			return TryActivateAbility(SpecToActivate->Handle);
+		}
+	}
+	
+	return false;
+}

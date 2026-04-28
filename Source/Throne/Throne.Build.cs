@@ -17,7 +17,10 @@ public class Throne : ModuleRules
 			"GameplayTags",
 			"GameplayAbilities",
 			"GameplayTasks",
-			"EnhancedInput"
+			"EnhancedInput", 
+			"AIModule",
+			"AnimGraphRuntime", 
+			"MotionWarping"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

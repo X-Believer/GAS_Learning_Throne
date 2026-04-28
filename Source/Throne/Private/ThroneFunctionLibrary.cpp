@@ -4,6 +4,7 @@
 #include "ThroneFunctionLibrary.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "GenericTeamAgentInterface.h"
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Characters/ThroneBaseCharacter.h"
 
@@ -65,4 +66,19 @@ UPawnCombatComponent* UThroneFunctionLibrary::BP_GetPawnCombatComponentFromActor
 	UPawnCombatComponent* PawnCombatComponent = NativeGetPawnCombatComponentFromActor(InActor);
 	ValidType = PawnCombatComponent ? EThroneValidType::Valid : EThroneValidType::Invalid;
 	return PawnCombatComponent;
+}
+
+bool UThroneFunctionLibrary::IsTargetPawnHostile(APawn* SourcePawn, APawn* TargetPawn)
+{
+	check(SourcePawn && TargetPawn);
+
+	const IGenericTeamAgentInterface* SourceTeamAgent = Cast<IGenericTeamAgentInterface>(SourcePawn->GetController());
+	const IGenericTeamAgentInterface* TargetTeamAgent = Cast<IGenericTeamAgentInterface>(TargetPawn->GetController());
+	
+	if (SourceTeamAgent && TargetTeamAgent)
+	{
+		return SourceTeamAgent->GetGenericTeamId() != TargetTeamAgent->GetGenericTeamId();
+	}
+	
+	return false;
 }

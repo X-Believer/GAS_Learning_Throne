@@ -3,7 +3,7 @@
 
 #include "Items/Weapons/ThroneWeaponBase.h"
 
-#include "ThroneDebugHelper.h"
+#include "ThroneFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -32,11 +32,10 @@ void AThroneWeaponBase::OnWeaponCollisionBoxBeginOverlap(UPrimitiveComponent* Ov
 	
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (WeaponOwningPawn != HitPawn)
+		if (UThroneFunctionLibrary::IsTargetPawnHostile(WeaponOwningPawn, HitPawn))
 		{
 			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
-		//TODO: Implement hit check for enemy characters
 	}
 }
 
@@ -49,10 +48,9 @@ void AThroneWeaponBase::OnWeaponCollisionBoxEndOverlap(UPrimitiveComponent* Over
 	
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (WeaponOwningPawn != HitPawn)
+		if (UThroneFunctionLibrary::IsTargetPawnHostile(WeaponOwningPawn, HitPawn))
 		{
 			OnWeaponEndHitTarget.ExecuteIfBound(OtherActor);
 		}
-		//TODO: Implement hit check for enemy characters
 	}
 }
