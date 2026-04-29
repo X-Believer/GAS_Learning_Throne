@@ -3,6 +3,7 @@
 
 #include "Components/Combat/EnemyCombatComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "ThroneFunctionLibrary.h"
 #include "ThroneGameplayTags.h"
 
 void UEnemyCombatComponent::OnWeaponHitTargetActor(AActor* OtherActor)
@@ -13,12 +14,12 @@ void UEnemyCombatComponent::OnWeaponHitTargetActor(AActor* OtherActor)
 	
 	bool bIsValidBlock = false;
 	
-	const bool bIsPlayerBlocking = false;
+	const bool bIsPlayerBlocking = UThroneFunctionLibrary::NativeDoesActorHasTag(OtherActor, ThroneGameplayTags::PlayerTag_Status_Blocking);
 	const bool bIsMyAttackBlockable = false;
 	
 	if (bIsPlayerBlocking && !bIsMyAttackBlockable)
 	{
-		
+		bIsValidBlock = UThroneFunctionLibrary::IsValidBlock(GetOwningPawn(), OtherActor);
 	}
 	
 	FGameplayEventData EventData;
@@ -27,7 +28,10 @@ void UEnemyCombatComponent::OnWeaponHitTargetActor(AActor* OtherActor)
 	
 	if (bIsValidBlock)
 	{
-		
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+			OtherActor,
+			ThroneGameplayTags::PlayerTag_Event_SuccessfulBlock,
+			EventData);
 	}
 	else
 	{

@@ -1,8 +1,11 @@
 // Copyright (c) 2026 Shuyang Xing. All rights reserved.
 
 #include "Characters/ThroneHeroCharacter.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystemInterface.h"
 #include "EnhancedInputSubsystems.h"
+#include "ThroneDebugHelper.h"
 #include "ThroneGameplayTags.h"
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
@@ -86,7 +89,8 @@ void AThroneHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	UThroneInputComponent* ThroneInputComponent = CastChecked<UThroneInputComponent>(PlayerInputComponent);
 	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &AThroneHeroCharacter::Input_Move);
 	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &AThroneHeroCharacter::Input_Look);
-	
+	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Triggered, this, &AThroneHeroCharacter::Input_SwitchTargetTriggered);
+	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Completed, this, &AThroneHeroCharacter::Input_SwitchTargetCompleted);
 	ThroneInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &AThroneHeroCharacter::Input_AbilityInputPressed, &AThroneHeroCharacter::Input_AbilityInputReleased, &AThroneHeroCharacter::Input_AbilityInputHeld);
 }
 
@@ -121,6 +125,21 @@ void AThroneHeroCharacter::Input_Look(const FInputActionValue& InputActionValue)
 	}
 	AddControllerYawInput(LookAxisVector.X);
 	AddControllerPitchInput(LookAxisVector.Y);
+}
+
+void AThroneHeroCharacter::Input_SwitchTargetTriggered(const FInputActionValue& InputActionValue)
+{
+	SwitchDirection = InputActionValue.Get<FVector2D>();
+}
+
+void AThroneHeroCharacter::Input_SwitchTargetCompleted(const FInputActionValue& InputActionValue)
+{
+	const FGameplayEventData Payload;
+	
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this, 
+		SwitchDirection.X > 0.f ? ThroneGameplayTags::PlayerTag_Event_SwitchTarget_Right : ThroneGameplayTags::PlayerTag_Event_SwitchTarget_Left, 
+		Payload);
 }
 
 void AThroneHeroCharacter::Input_AbilityInputPressed(const FGameplayTag InInputTag)

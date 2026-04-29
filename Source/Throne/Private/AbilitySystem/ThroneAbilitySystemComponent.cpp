@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 
+#include "ThroneGameplayTags.h"
 #include "AbilitySystem/Abilities/ThroneGameplayAbility.h"
 #include "AbilitySystem/Abilities/ThroneHeroGameplayAbility.h"
 #include "ThroneTypes/ThroneStructTypes.h"
@@ -15,12 +16,34 @@ void UThroneAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& In
 	{
 		if (!AbilitySpec.DynamicAbilityTags.HasTagExact(InInputTag)) continue;
 		
-		TryActivateAbility(AbilitySpec.Handle);
+		if (InInputTag.MatchesTag(ThroneGameplayTags::InputTag_Toggleable))
+		{
+			if (AbilitySpec.IsActive())
+			{
+				CancelAbilityHandle(AbilitySpec.Handle);
+			}
+			else
+			{
+				TryActivateAbility(AbilitySpec.Handle);
+			}
+		}
+		else
+		{
+			TryActivateAbility(AbilitySpec.Handle);
+		}
 	}
 }
 
 void UThroneAbilitySystemComponent::OnAbilityInputReleased(const FGameplayTag& InInputTag)
 {
+	if (!InInputTag.IsValid() || !InInputTag.MatchesTag(ThroneGameplayTags::InputTag_MustBeHeld)) return;
+	
+	for (const FGameplayAbilitySpec& Spec : GetActivatableAbilities())
+	{
+		if (!Spec.DynamicAbilityTags.HasTagExact(InInputTag) || !Spec.IsActive()) continue;
+		
+		CancelAbilityHandle(Spec.Handle);
+	}
 }
 
 void UThroneAbilitySystemComponent::OnAbilityInputHeld(const FGameplayTag& InInputTag)

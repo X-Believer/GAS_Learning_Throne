@@ -7,6 +7,7 @@
 #include "ThroneTypes/ThroneEnumTypes.h"
 #include "ThroneFunctionLibrary.generated.h"
 
+struct FScalableFloat;
 class UPawnCombatComponent;
 struct FGameplayTag;
 class UThroneAbilitySystemComponent;
@@ -40,4 +41,13 @@ public:
 	
 	UFUNCTION(BlueprintPure, Category = "Throne|FunctionLibrary")
 	static bool IsTargetPawnHostile(APawn* SourcePawn, APawn* TargetPawn);
+	
+	UFUNCTION(BlueprintPure, Category = "Throne|FunctionLibrary",meta=(CompactNodeTitle="Get Value At Level"))
+	static float GetScalableFloatValueAtLevel(const FScalableFloat& ScalableFloat, int32 InLevel);
+	
+	UFUNCTION(BlueprintPure, Category = "Throne|FunctionLibrary")
+	static FGameplayTag ComputeHitReactDirectionTag(const AActor* SourceActor, const AActor* TargetActor, float& OutAngleDiff);
+	
+	UFUNCTION(BlueprintPure, Category = "Throne|FunctionLibrary")
+	static bool IsValidBlock(const AActor* InAttackingActor, const AActor* InDefendingActor);
 };

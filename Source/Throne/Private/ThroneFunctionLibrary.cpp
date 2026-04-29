@@ -5,8 +5,10 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "GenericTeamAgentInterface.h"
+#include "ThroneGameplayTags.h"
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Characters/ThroneBaseCharacter.h"
+#include "Kismet/KismetMathLibrary.h"
 
 UThroneAbilitySystemComponent* UThroneFunctionLibrary::NativeGetThroneASCFromActor(AActor* InActor)
 {
@@ -81,4 +83,48 @@ bool UThroneFunctionLibrary::IsTargetPawnHostile(APawn* SourcePawn, APawn* Targe
 	}
 	
 	return false;
+}
+
+float UThroneFunctionLibrary::GetScalableFloatValueAtLevel(const FScalableFloat& ScalableFloat, const int32 InLevel)
+{
+	return ScalableFloat.GetValueAtLevel(InLevel);
+}
+
+FGameplayTag UThroneFunctionLibrary::ComputeHitReactDirectionTag(const AActor* SourceActor, const AActor* TargetActor, float& OutAngleDiff)
+{
+	check(SourceActor && TargetActor);
+	
+	const FVector TargetToSource = (SourceActor->GetActorLocation() - TargetActor->GetActorLocation()).GetSafeNormal();
+	const FVector TargetForward = TargetActor->GetActorForwardVector();
+	
+	const float DotResult = FVector::DotProduct(TargetToSource, TargetForward);
+	OutAngleDiff = UKismetMathLibrary::DegAcos(DotResult);
+	
+	const FVector CrossProduct = FVector::CrossProduct(TargetForward, TargetToSource);
+	OutAngleDiff *= CrossProduct.Z < 0 ? -1.f : 1.f;
+	
+	if (OutAngleDiff >= -45.f && OutAngleDiff <= 45.f)
+	{
+		return ThroneGameplayTags::Shared_Status_HitReact_Front;
+	}
+	else if (OutAngleDiff > 45.f && OutAngleDiff <= 135.f)
+	{
+		return ThroneGameplayTags::Shared_Status_HitReact_Right;
+	}
+	else if (OutAngleDiff < -45.f && OutAngleDiff >= -135.f)
+	{
+		return ThroneGameplayTags::Shared_Status_HitReact_Left;
+	}
+	else
+	{
+		return ThroneGameplayTags::Shared_Status_HitReact_Back;
+	}
+}
+
+bool UThroneFunctionLibrary::IsValidBlock(const AActor* InAttackingActor, const AActor* InDefendingActor)
+{
+	check(InAttackingActor && InDefendingActor);
+	
+	const float DotProduct = FVector::DotProduct(InAttackingActor->GetActorForwardVector(), InDefendingActor->GetActorForwardVector());
+	return DotProduct < -0.1f;
 }
