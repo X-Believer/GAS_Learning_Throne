@@ -58,6 +58,7 @@ namespace ThroneGameplayTags
 	
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(EnemyTag_Status_Strafing);
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(EnemyTag_Status_UnderAttack);
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(EnemyTag_Status_Unblockable);
 	
 	/* Shared Tags*/
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Ability_HitReact);
@@ -65,6 +66,7 @@ namespace ThroneGameplayTags
 	
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Event_MeleeHit);
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Event_HitReact);
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Event_SpawnProjectile);
 	
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_SetByCaller_BaseDamage);
 	

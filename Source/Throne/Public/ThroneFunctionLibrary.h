@@ -7,6 +7,7 @@
 #include "ThroneTypes/ThroneEnumTypes.h"
 #include "ThroneFunctionLibrary.generated.h"
 
+struct FGameplayEffectSpecHandle;
 struct FScalableFloat;
 class UPawnCombatComponent;
 struct FGameplayTag;
@@ -50,4 +51,7 @@ public:
 	
 	UFUNCTION(BlueprintPure, Category = "Throne|FunctionLibrary")
 	static bool IsValidBlock(const AActor* InAttackingActor, const AActor* InDefendingActor);
+	
+	UFUNCTION(BlueprintCallable, Category = "Throne|FunctionLibrary")
+	static bool ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor, const FGameplayEffectSpecHandle& InSpecHandle);
 };

@@ -15,7 +15,7 @@ void UEnemyCombatComponent::OnWeaponHitTargetActor(AActor* OtherActor)
 	bool bIsValidBlock = false;
 	
 	const bool bIsPlayerBlocking = UThroneFunctionLibrary::NativeDoesActorHasTag(OtherActor, ThroneGameplayTags::PlayerTag_Status_Blocking);
-	const bool bIsMyAttackBlockable = false;
+	const bool bIsMyAttackBlockable = UThroneFunctionLibrary::NativeDoesActorHasTag(GetOwningPawn(), ThroneGameplayTags::EnemyTag_Status_Unblockable);
 	
 	if (bIsPlayerBlocking && !bIsMyAttackBlockable)
 	{

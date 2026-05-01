@@ -128,3 +128,13 @@ bool UThroneFunctionLibrary::IsValidBlock(const AActor* InAttackingActor, const 
 	const float DotProduct = FVector::DotProduct(InAttackingActor->GetActorForwardVector(), InDefendingActor->GetActorForwardVector());
 	return DotProduct < -0.1f;
 }
+
+bool UThroneFunctionLibrary::ApplyGameplayEffectSpecHandleToTargetActor(AActor* InInstigator, AActor* InTargetActor,
+	const FGameplayEffectSpecHandle& InSpecHandle)
+{
+	UThroneAbilitySystemComponent* SourceASC = NativeGetThroneASCFromActor(InInstigator);
+	UThroneAbilitySystemComponent* TargetASC = NativeGetThroneASCFromActor(InTargetActor);
+	
+	FActiveGameplayEffectHandle ActiveEffectHandle = SourceASC->ApplyGameplayEffectSpecToTarget(*InSpecHandle.Data.Get(), TargetASC);
+	return ActiveEffectHandle.WasSuccessfullyApplied();
+}

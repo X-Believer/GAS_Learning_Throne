@@ -57,6 +57,7 @@ namespace ThroneGameplayTags
 	
 	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Status_Strafing, "EnemyTag.Status.Strafing");
 	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Status_UnderAttack, "EnemyTag.Status.UnderAttack");
+	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Status_Unblockable, "EnemyTag.Status.Unblockable");
 	
 	/* Shared Tags*/
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Ability_HitReact, "Shared.Ability.HitReact");
@@ -64,6 +65,7 @@ namespace ThroneGameplayTags
 	
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Event_MeleeHit, "Shared.Event.MeleeHit");
 	UE_DEFINE_GAMEPLAY_TAG(Shared_Event_HitReact, "Shared.Event.HitReact");
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Event_SpawnProjectile, "Shared.Event.SpawnProjectile");
 	
 	UE_DEFINE_GAMEPLAY_TAG(Shared_SetByCaller_BaseDamage, "Shared.SetByCaller.BaseDamage");
 	

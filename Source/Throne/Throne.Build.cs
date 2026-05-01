@@ -20,7 +20,8 @@ public class Throne : ModuleRules
 			"EnhancedInput", 
 			"AIModule",
 			"AnimGraphRuntime", 
-			"MotionWarping"
+			"MotionWarping", 
+			"Niagara"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
