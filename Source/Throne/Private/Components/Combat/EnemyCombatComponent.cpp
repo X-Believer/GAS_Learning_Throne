@@ -5,6 +5,8 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "ThroneFunctionLibrary.h"
 #include "ThroneGameplayTags.h"
+#include "Characters/ThroneEnemyCharacter.h"
+#include "Components/BoxComponent.h"
 
 void UEnemyCombatComponent::OnWeaponHitTargetActor(AActor* OtherActor)
 {
@@ -39,5 +41,35 @@ void UEnemyCombatComponent::OnWeaponHitTargetActor(AActor* OtherActor)
 			GetOwningPawn(),
 			ThroneGameplayTags::Shared_Event_MeleeHit,
 			EventData);
+	}
+}
+
+void UEnemyCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldToggle, EToggleDamageType ToggleDamageType)
+{
+	Super::ToggleBodyCollisionBoxCollision(bShouldToggle, ToggleDamageType);
+	
+	AThroneEnemyCharacter* OwningEnemyCharacter = Cast<AThroneEnemyCharacter>(GetOwningPawn());
+	check(OwningEnemyCharacter);
+	
+	UBoxComponent* LeftHandCollisionBox = OwningEnemyCharacter->GetLeftHandCollisionBox();
+	UBoxComponent* RightHandCollisionBox = OwningEnemyCharacter->GetRightHandCollisionBox();
+	
+	check(LeftHandCollisionBox && RightHandCollisionBox);
+
+	switch (ToggleDamageType)
+	{
+		case EToggleDamageType::LeftHand:
+			LeftHandCollisionBox->SetCollisionEnabled(bShouldToggle ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+			break;
+		case EToggleDamageType::RightHand:
+			RightHandCollisionBox->SetCollisionEnabled(bShouldToggle ? ECollisionEnabled::QueryOnly : ECollisionEnabled::NoCollision);
+			break;
+		default:
+			break;
+	}
+	
+	if (!bShouldToggle)
+	{
+		OverlappedActors.Empty();
 	}
 }

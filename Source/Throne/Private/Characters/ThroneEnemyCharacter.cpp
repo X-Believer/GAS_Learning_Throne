@@ -2,6 +2,8 @@
 
 #include "Characters/ThroneEnemyCharacter.h"
 
+#include "ThroneFunctionLibrary.h"
+#include "Components/BoxComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/Combat/EnemyCombatComponent.h"
 #include "Components/UI/EnemyUIComponent.h"
@@ -28,8 +30,18 @@ AThroneEnemyCharacter::AThroneEnemyCharacter()
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>(TEXT("EnemyCombatComponent"));
 	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>(TEXT("EnemyUIComponent"));
 	EnemyHealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("EnemyHealthWidgetComponent"));
-	
 	EnemyHealthWidgetComponent->SetupAttachment(GetMesh());
+	
+	LeftHandCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("LeftHandCollisionBox"));
+	LeftHandCollisionBox->SetupAttachment(GetMesh());
+	LeftHandCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	LeftHandCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this, &AThroneEnemyCharacter::OnBodyCollisionBoxBeginOverlap);
+	
+	RightHandCollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("RightHandCollisionBox"));
+	RightHandCollisionBox->SetupAttachment(GetMesh());
+	RightHandCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RightHandCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this, &AThroneEnemyCharacter::OnBodyCollisionBoxBeginOverlap);
+
 }
 
 void AThroneEnemyCharacter::BeginPlay()
@@ -62,6 +74,34 @@ UPawnUIComponent* AThroneEnemyCharacter::GetPawnUIComponent() const
 UEnemyUIComponent* AThroneEnemyCharacter::GetEnemyUIComponent() const
 {
 	return EnemyUIComponent;
+}
+
+#if WITH_EDITOR
+void AThroneEnemyCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	
+	if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(AThroneEnemyCharacter, LeftHandCollisionBoxAttachBoneName))
+	{
+		LeftHandCollisionBox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, LeftHandCollisionBoxAttachBoneName);
+	}
+	else if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(AThroneEnemyCharacter, RightHandCollisionBoxAttachBoneName))
+	{
+		RightHandCollisionBox->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, RightHandCollisionBoxAttachBoneName);
+	}
+}
+#endif
+
+void AThroneEnemyCharacter::OnBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                                                           UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if (UThroneFunctionLibrary::IsTargetPawnHostile(this, HitPawn))
+		{
+			EnemyCombatComponent->OnWeaponHitTargetActor(HitPawn);
+		}
+	}
 }
 
 void AThroneEnemyCharacter::InitEnemyStartUpData() const

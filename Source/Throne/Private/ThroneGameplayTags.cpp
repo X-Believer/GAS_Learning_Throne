@@ -52,8 +52,11 @@ namespace ThroneGameplayTags
 	/* Enemy Tags*/
 	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Ability_Melee, "EnemyTag.Ability.Melee");
 	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Ability_Ranged, "EnemyTag.Ability.Ranged");
+	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Ability_SummonEnemy, "EnemyTag.Ability.SummonEnemy");
 	
 	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Weapon, "EnemyTag.Weapon");
+	
+	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Event_SummonEnemy, "EnemyTag.Event.SummonEnemy");
 	
 	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Status_Strafing, "EnemyTag.Status.Strafing");
 	UE_DEFINE_GAMEPLAY_TAG(EnemyTag_Status_UnderAttack, "EnemyTag.Status.UnderAttack");

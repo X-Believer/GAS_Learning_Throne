@@ -46,6 +46,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Throne|Combat")
 	TArray<AActor*> OverlappedActors;
 	
+	virtual void ToggleCurrentEquippedWeaponCollision(bool bShouldToggle);
+	virtual void ToggleBodyCollisionBoxCollision(bool bShouldToggle, EToggleDamageType ToggleDamageType);
+	
 private:
 	UPROPERTY()
 	TMap<FGameplayTag, AThroneWeaponBase*> CharacterCarriedWeaponMap;

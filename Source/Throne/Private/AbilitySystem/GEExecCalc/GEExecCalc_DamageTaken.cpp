@@ -82,7 +82,7 @@ void UGEExecCalc_DamageTaken::Execute_Implementation(const FGameplayEffectCustom
 	{
 		OutExecutionOutput.AddOutputModifier(FGameplayModifierEvaluatedData(
 			GetThroneDamageCapture().DamageTakenProperty, 
-			EGameplayModOp::Additive, 
+			EGameplayModOp::Override, 
 			FinalDamage));
 	}
 }

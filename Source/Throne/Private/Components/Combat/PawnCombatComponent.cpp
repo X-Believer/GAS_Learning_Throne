@@ -2,8 +2,6 @@
 
 
 #include "Components/Combat/PawnCombatComponent.h"
-
-#include "ThroneDebugHelper.h"
 #include "Components/BoxComponent.h"
 #include "Items/Weapons/ThroneWeaponBase.h"
 
@@ -50,22 +48,12 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldToggle, EToggleDama
 {
 	if (ToggleDamageType == EToggleDamageType::CurrentEquippedWeapon)
 	{
-		AThroneWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
-		
-		check(WeaponToToggle);
-		
-		if (bShouldToggle)
-		{
-			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-		}
-		else
-		{
-			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			OverlappedActors.Empty();
-		}
+		ToggleCurrentEquippedWeaponCollision(bShouldToggle);
 	}
-	
-	//TODO: Handle body collision boxes
+	else
+	{
+		ToggleBodyCollisionBoxCollision(bShouldToggle, ToggleDamageType);
+	}
 }
 
 void UPawnCombatComponent::OnWeaponHitTargetActor(AActor* OtherActor)
@@ -74,4 +62,26 @@ void UPawnCombatComponent::OnWeaponHitTargetActor(AActor* OtherActor)
 
 void UPawnCombatComponent::OnWeaponEndHitTargetActor(AActor* OtherActor)
 {
+}
+
+void UPawnCombatComponent::ToggleCurrentEquippedWeaponCollision(bool bShouldToggle)
+{
+	AThroneWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
+		
+	check(WeaponToToggle);
+		
+	if (bShouldToggle)
+	{
+		WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
+	else
+	{
+		WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		OverlappedActors.Empty();
+	}
+}
+
+void UPawnCombatComponent::ToggleBodyCollisionBoxCollision(bool bShouldToggle, EToggleDamageType ToggleDamageType)
+{
+	
 }

@@ -21,7 +21,8 @@ public class Throne : ModuleRules
 			"AIModule",
 			"AnimGraphRuntime", 
 			"MotionWarping", 
-			"Niagara"
+			"Niagara",
+			"NavigationSystem"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
