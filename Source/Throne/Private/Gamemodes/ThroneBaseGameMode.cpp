@@ -4,3 +4,8 @@
 #include "Gamemodes/ThroneBaseGameMode.h"
 
 
+AThroneBaseGameMode::AThroneBaseGameMode()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+}

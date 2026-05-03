@@ -35,3 +35,12 @@ enum class EThroneCountdownActionOutput : uint8
 	Completed,
 	Cancelled
 };
+
+UENUM(BlueprintType)
+enum class EThroneGameDifficulty : uint8
+{
+	Easy,
+	Medium,
+	Hard,
+	Brutal
+};

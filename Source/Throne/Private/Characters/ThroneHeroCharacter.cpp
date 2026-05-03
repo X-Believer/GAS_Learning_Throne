@@ -16,6 +16,7 @@
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Gamemodes/ThroneBaseGameMode.h"
 
 AThroneHeroCharacter::AThroneHeroCharacter()
 {
@@ -50,9 +51,30 @@ void AThroneHeroCharacter::PossessedBy(AController* NewController)
 	
 	if (!CharacterStartUpData.IsNull())
 	{
-		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous())
+		if (const UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.LoadSynchronous())
 		{
-			LoadedData->GiveToAbilitySystemComponent(ThroneAbilitySystemComponent);
+			int32 AbilityApplyLevel = 1;
+			
+			if (const AThroneBaseGameMode* BaseGameMode = GetWorld()->GetAuthGameMode<AThroneBaseGameMode>())
+			{
+				switch (BaseGameMode->GetCurrentGameDifficulty())
+				{
+				case EThroneGameDifficulty::Easy:
+					AbilityApplyLevel = 4;
+					break;
+				case EThroneGameDifficulty::Medium:
+					AbilityApplyLevel = 3;
+					break;
+				case EThroneGameDifficulty::Hard:
+					AbilityApplyLevel = 2;
+					break;
+				case EThroneGameDifficulty::Brutal:
+					AbilityApplyLevel = 1;
+					break;
+				}
+			}
+			
+			LoadedData->GiveToAbilitySystemComponent(ThroneAbilitySystemComponent, AbilityApplyLevel);
 		}
 	}
 }

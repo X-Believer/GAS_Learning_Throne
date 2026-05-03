@@ -11,6 +11,7 @@
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Gamemodes/ThroneBaseGameMode.h"
 #include "Widgets/ThroneWidgetBase.h"
 
 AThroneEnemyCharacter::AThroneEnemyCharacter()
@@ -107,15 +108,35 @@ void AThroneEnemyCharacter::OnBodyCollisionBoxBeginOverlap(UPrimitiveComponent* 
 void AThroneEnemyCharacter::InitEnemyStartUpData() const
 {
 	if (CharacterStartUpData.IsNull()) return;
+	int32 AbilityApplyLevel = 1;
+			
+	if (const AThroneBaseGameMode* BaseGameMode = GetWorld()->GetAuthGameMode<AThroneBaseGameMode>())
+	{
+		switch (BaseGameMode->GetCurrentGameDifficulty())
+		{
+		case EThroneGameDifficulty::Easy:
+			AbilityApplyLevel = 1;
+			break;
+		case EThroneGameDifficulty::Medium:
+			AbilityApplyLevel = 2;
+			break;
+		case EThroneGameDifficulty::Hard:
+			AbilityApplyLevel = 3;
+			break;
+		case EThroneGameDifficulty::Brutal:
+			AbilityApplyLevel = 4;
+			break;
+		}
+	}
 	
 	UAssetManager::GetStreamableManager().RequestAsyncLoad(
 		CharacterStartUpData.ToSoftObjectPath(), 
 		FStreamableDelegate::CreateLambda(
-			[this]()
+			[this, AbilityApplyLevel]()
 			{
 				if (const UDataAsset_StartUpDataBase* LoadedData = CharacterStartUpData.Get())
 				{
-					LoadedData->GiveToAbilitySystemComponent(ThroneAbilitySystemComponent);
+					LoadedData->GiveToAbilitySystemComponent(ThroneAbilitySystemComponent, AbilityApplyLevel);
 				}
 			}
 		)
