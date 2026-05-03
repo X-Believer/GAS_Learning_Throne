@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "ThroneAbilitySystemComponent.generated.h"
 
+struct FWarriorHeroSpecialAbilitySet;
 struct FThroneHeroAbilitySet;
 /**
  * 
@@ -21,7 +22,7 @@ public:
 	void OnAbilityInputHeld(const FGameplayTag& InInputTag);
 	
 	UFUNCTION(BlueprintCallable, Category = "Throne|Ability", meta=(ApplyLevel="1"))
-	void GrantHeroWeaponAbilities(const TArray<FThroneHeroAbilitySet>& InDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilityHandles);
+	void GrantHeroWeaponAbilities(const TArray<FThroneHeroAbilitySet>& InDefaultWeaponAbilities, const TArray<FWarriorHeroSpecialAbilitySet>& InSpecialWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilityHandles);
 	
 	UFUNCTION(BlueprintCallable, Category = "Throne|Ability")
 	void RemoveGrantedHeroWeaponAbilities(UPARAM(ref) TArray<FGameplayAbilitySpecHandle>& InSpecHandlesToRemove);

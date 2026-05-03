@@ -16,20 +16,13 @@ void UThroneAbilitySystemComponent::OnAbilityInputPressed(const FGameplayTag& In
 	{
 		if (!AbilitySpec.DynamicAbilityTags.HasTagExact(InInputTag)) continue;
 		
-		if (InInputTag.MatchesTag(ThroneGameplayTags::InputTag_Toggleable))
+		if (InInputTag.MatchesTag(ThroneGameplayTags::InputTag_Toggleable) && AbilitySpec.IsActive())
 		{
-			if (AbilitySpec.IsActive())
-			{
-				CancelAbilityHandle(AbilitySpec.Handle);
-			}
-			else
-			{
-				TryActivateAbility(AbilitySpec.Handle);
-			}
+			CancelAbilityHandle(AbilitySpec.Handle);
 		}
 		else
 		{
-			TryActivateAbility(AbilitySpec.Handle);
+			 TryActivateAbility(AbilitySpec.Handle);
 		}
 	}
 }
@@ -50,8 +43,7 @@ void UThroneAbilitySystemComponent::OnAbilityInputHeld(const FGameplayTag& InInp
 {
 }
 
-void UThroneAbilitySystemComponent::GrantHeroWeaponAbilities(
-	const TArray<FThroneHeroAbilitySet>& InDefaultWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilityHandles)
+void UThroneAbilitySystemComponent::GrantHeroWeaponAbilities(const TArray<FThroneHeroAbilitySet>& InDefaultWeaponAbilities, const TArray<FWarriorHeroSpecialAbilitySet>& InSpecialWeaponAbilities, int32 ApplyLevel, TArray<FGameplayAbilitySpecHandle>& OutGrantedAbilityHandles)
 {
 	if (InDefaultWeaponAbilities.IsEmpty()) return;
 	
@@ -63,6 +55,20 @@ void UThroneAbilitySystemComponent::GrantHeroWeaponAbilities(
 		AbilitySpec.SourceObject = GetAvatarActor();
 		AbilitySpec.Level = ApplyLevel;
 		AbilitySpec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);
+		
+		OutGrantedAbilityHandles.AddUnique(GiveAbility(AbilitySpec));
+	}
+		
+	if (InSpecialWeaponAbilities.IsEmpty()) return;
+	
+	for (const FWarriorHeroSpecialAbilitySet& SpecialAbilitySet : InSpecialWeaponAbilities)
+	{
+		if (!SpecialAbilitySet.IsValid()) continue;
+		
+		FGameplayAbilitySpec AbilitySpec((SpecialAbilitySet.AbilityToGrant.Get()));
+		AbilitySpec.SourceObject = GetAvatarActor();
+		AbilitySpec.Level = ApplyLevel;
+		AbilitySpec.DynamicAbilityTags.AddTag(SpecialAbilitySet.InputTag);
 		
 		OutGrantedAbilityHandles.AddUnique(GiveAbility(AbilitySpec));
 	}

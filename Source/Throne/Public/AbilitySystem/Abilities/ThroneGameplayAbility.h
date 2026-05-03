@@ -44,4 +44,7 @@ protected:
 	
 	UFUNCTION(BlueprintCallable, Category="Throne|Ability", meta=(DisplayName="ApplyGameplayEffectSpecHandleToTarget",ExpandEnumAsExecs="SuccessType"))
 	FActiveGameplayEffectHandle BP_ApplyEffectSpecHandleToTarget(AActor* Target, const FGameplayEffectSpecHandle& InSpecHandle, EThroneSuccessType& SuccessType);
+	
+	UFUNCTION(BlueprintCallable, Category="Throne|Ability")
+	void ApplyGameplayEffectSpecHandleToHitResults(const FGameplayEffectSpecHandle& InSpecHandle, const TArray<FHitResult>& HitResults);
 };

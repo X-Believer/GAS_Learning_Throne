@@ -5,7 +5,6 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystemInterface.h"
 #include "EnhancedInputSubsystems.h"
-#include "ThroneDebugHelper.h"
 #include "ThroneGameplayTags.h"
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
@@ -91,6 +90,7 @@ void AThroneHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &AThroneHeroCharacter::Input_Look);
 	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Triggered, this, &AThroneHeroCharacter::Input_SwitchTargetTriggered);
 	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_SwitchTarget, ETriggerEvent::Completed, this, &AThroneHeroCharacter::Input_SwitchTargetCompleted);
+	ThroneInputComponent->BindNativeAction(InputConfigDataAsset, ThroneGameplayTags::InputTag_PickUp_Stones, ETriggerEvent::Started, this, &AThroneHeroCharacter::Input_PickUpStonesStarted);
 	ThroneInputComponent->BindAbilityInputAction(InputConfigDataAsset, this, &AThroneHeroCharacter::Input_AbilityInputPressed, &AThroneHeroCharacter::Input_AbilityInputReleased, &AThroneHeroCharacter::Input_AbilityInputHeld);
 }
 
@@ -139,6 +139,16 @@ void AThroneHeroCharacter::Input_SwitchTargetCompleted(const FInputActionValue& 
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
 		this, 
 		SwitchDirection.X > 0.f ? ThroneGameplayTags::PlayerTag_Event_SwitchTarget_Right : ThroneGameplayTags::PlayerTag_Event_SwitchTarget_Left, 
+		Payload);
+}
+
+void AThroneHeroCharacter::Input_PickUpStonesStarted(const FInputActionValue& InputActionValue)
+{
+	const FGameplayEventData Payload;
+	
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		this, 
+		ThroneGameplayTags::PlayerTag_Event_ConsumeStone,
 		Payload);
 }
 

@@ -20,3 +20,18 @@ enum class EThroneSuccessType : uint8
 	Success,
 	Failure
 };
+
+UENUM()
+enum class EThroneCountdownActionInput : uint8
+{
+	Start,
+	Cancel
+};
+
+UENUM()
+enum class EThroneCountdownActionOutput : uint8
+{
+	Updated,
+	Completed,
+	Cancelled
+};

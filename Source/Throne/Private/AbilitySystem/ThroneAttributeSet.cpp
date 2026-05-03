@@ -45,6 +45,20 @@ void UThroneAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffect
 		const float NewRage = FMath::Clamp(GetCurrentRage(), 0.f, GetMaxRage());
 		SetCurrentRage(NewRage);
 		
+		if (GetCurrentRage() == GetMaxRage())
+		{
+			UThroneFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), ThroneGameplayTags::PlayerTag_Status_Rage_Full);
+		}
+		else if (GetCurrentRage() == 0.f)
+		{
+			UThroneFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), ThroneGameplayTags::PlayerTag_Status_Rage_None);
+		}
+		else
+		{
+			UThroneFunctionLibrary::RemoveGameplayTagFromActorIfFound(Data.Target.GetAvatarActor(), ThroneGameplayTags::PlayerTag_Status_Rage_Full);
+			UThroneFunctionLibrary::RemoveGameplayTagFromActorIfFound(Data.Target.GetAvatarActor(), ThroneGameplayTags::PlayerTag_Status_Rage_None);
+		}
+		
 		if (const UHeroUIComponent* HeroUIComponent = CachedPawnUIInterface->GetHeroUIComponent())
 		{
 			HeroUIComponent->OnCurrentRageChanged.Broadcast(GetCurrentRage() / GetMaxRage());

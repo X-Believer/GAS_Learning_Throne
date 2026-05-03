@@ -86,7 +86,20 @@ void AThroneProjectileBase::OnProjectileHit(UPrimitiveComponent* HitComponent, A
 void AThroneProjectileBase::OnProjectileBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (OverLappedActors.Contains(OtherActor)) return;
+	OverLappedActors.AddUnique(OtherActor);
 	
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		FGameplayEventData Data;
+		Data.Target = HitPawn;
+		Data.Instigator = GetInstigator();
+		
+		if (UThroneFunctionLibrary::IsTargetPawnHostile(GetInstigator(), HitPawn))
+		{
+			HandleApplyProjectileDamage(HitPawn, Data);
+		}
+	}
 }
 
 void AThroneProjectileBase::HandleApplyProjectileDamage(APawn* HitPawn, const FGameplayEventData& InEventData)

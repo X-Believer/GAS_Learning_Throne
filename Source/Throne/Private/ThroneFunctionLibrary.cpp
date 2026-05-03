@@ -9,6 +9,7 @@
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Characters/ThroneBaseCharacter.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ThroneTypes/ThroneCountdownAction.h"
 
 UThroneAbilitySystemComponent* UThroneFunctionLibrary::NativeGetThroneASCFromActor(AActor* InActor)
 {
@@ -137,4 +138,37 @@ bool UThroneFunctionLibrary::ApplyGameplayEffectSpecHandleToTargetActor(AActor* 
 	
 	FActiveGameplayEffectHandle ActiveEffectHandle = SourceASC->ApplyGameplayEffectSpecToTarget(*InSpecHandle.Data.Get(), TargetASC);
 	return ActiveEffectHandle.WasSuccessfullyApplied();
+}
+
+void UThroneFunctionLibrary::Countdown(const UObject* WorldContextObject, float TotalTime, float UpdateInterval, float& OutRemainingTime, EThroneCountdownActionInput CountdownInput, UPARAM(DisplayName="Output") EThroneCountdownActionOutput& CountdownOutput, FLatentActionInfo LatentInfo)
+{
+	UWorld* World = nullptr;
+	
+	if (GEngine)
+	{
+		World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+	}
+	if (!World) return;
+	
+	FLatentActionManager& LatentActionManager = World->GetLatentActionManager();
+	FThroneCountdownAction* FoundAction = LatentActionManager.FindExistingAction<FThroneCountdownAction>(LatentInfo.CallbackTarget, LatentInfo.UUID);
+	
+	if (CountdownInput == EThroneCountdownActionInput::Start)
+	{
+		if (!FoundAction)
+		{
+			LatentActionManager.AddNewAction(
+				LatentInfo.CallbackTarget, 
+				LatentInfo.UUID, 
+				new FThroneCountdownAction(TotalTime, UpdateInterval, OutRemainingTime, CountdownOutput, LatentInfo));
+		}
+	}
+	
+	if (CountdownInput == EThroneCountdownActionInput::Cancel)
+	{
+		if (FoundAction)
+		{
+			FoundAction->CancelAction();
+		}
+	}
 }

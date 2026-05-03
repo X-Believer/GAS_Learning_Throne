@@ -6,6 +6,7 @@
 #include "AbilitySystem/Abilities/ThroneGameplayAbility.h"
 #include "ThroneHeroGameplayAbility.generated.h"
 
+class UHeroUIComponent;
 class UHeroCombatComponent;
 class AThroneHeroController;
 class AThroneHeroCharacter;
@@ -28,7 +29,13 @@ public:
 	UHeroCombatComponent* GetHeroCombatComponentFromActorInfo();
 	
 	UFUNCTION(BlueprintPure, Category="Throne|Ability")
+	UHeroUIComponent* GetHeroUIComponentFromActorInfo();
+	
+	UFUNCTION(BlueprintPure, Category="Throne|Ability")
 	FGameplayEffectSpecHandle MakeHeroDamageEffectSpecHandle(TSubclassOf<UGameplayEffect> DamageEffect, float InWeaponBaseDamage, FGameplayTag AttackTypeTag, int32 InComboCount) const;
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category="Throne|Ability")
+	bool GetAbilityRemainingCooldownByTag(FGameplayTag InCooldownTag, float& TotalCooldownTime, float& RemainingCooldownTime) const;
 	
 private:
 	TWeakObjectPtr<AThroneHeroCharacter> CachedHeroCharacter;

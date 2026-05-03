@@ -24,6 +24,18 @@ struct FThroneHeroAbilitySet
 };
 
 USTRUCT(BlueprintType)
+struct FWarriorHeroSpecialAbilitySet : public FThroneHeroAbilitySet
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSoftObjectPtr<UMaterialInterface> SoftAbilityIconMaterial;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, BlueprintReadOnly, meta=(Categories="PlayerTag.Cooldown"))
+	FGameplayTag AbilityCooldownTag;
+};
+
+USTRUCT(BlueprintType)
 struct FThroneHeroWeaponData
 {
 	GENERATED_BODY()
@@ -36,6 +48,9 @@ struct FThroneHeroWeaponData
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(TitleProperty="InputTag"))
 	TArray<FThroneHeroAbilitySet> DefaultWeaponAbilities;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(TitleProperty="InputTag"))
+	TArray<FWarriorHeroSpecialAbilitySet> SpecialWeaponAbilities;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FScalableFloat WeaponBaseDamage;

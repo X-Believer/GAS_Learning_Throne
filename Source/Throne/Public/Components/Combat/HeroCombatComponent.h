@@ -23,7 +23,7 @@ public:
 	AThroneHeroWeapon* GetHeroCurrentEquippedWeapon() const;
 	
 	UFUNCTION(BlueprintCallable, Category="Throne|Combat")
-	float GetHeroCurrentEquippedWeaponDamageAtLevel(float InLevel) const;
+	float GetHeroCurrentEquippedWeaponDamageAtLevel(int32 InLevel) const;
 	
 	virtual void OnWeaponHitTargetActor(AActor* OtherActor) override;
 	virtual void OnWeaponEndHitTargetActor(AActor* OtherActor) override;

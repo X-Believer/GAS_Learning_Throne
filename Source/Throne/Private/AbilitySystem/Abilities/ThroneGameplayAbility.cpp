@@ -4,6 +4,8 @@
 #include "AbilitySystem/Abilities/ThroneGameplayAbility.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "ThroneFunctionLibrary.h"
+#include "ThroneGameplayTags.h"
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Components/Combat/PawnCombatComponent.h"
 
@@ -62,4 +64,32 @@ FActiveGameplayEffectHandle UThroneGameplayAbility::BP_ApplyEffectSpecHandleToTa
 	const FActiveGameplayEffectHandle ActiveGameplayEffectHandle = NativeApplyEffectSpecHandleToTarget(Target, InSpecHandle);
 	SuccessType = ActiveGameplayEffectHandle.WasSuccessfullyApplied() ? EThroneSuccessType::Success : EThroneSuccessType::Failure;
 	return ActiveGameplayEffectHandle;
+}
+
+void UThroneGameplayAbility::ApplyGameplayEffectSpecHandleToHitResults(const FGameplayEffectSpecHandle& InSpecHandle,
+	const TArray<FHitResult>& HitResults)
+{
+	if (HitResults.IsEmpty()) return;
+	
+	APawn* OwningPawn = CastChecked<APawn>(GetAvatarActorFromActorInfo());
+	
+	for (const FHitResult& HitResult : HitResults)
+	{
+		if (APawn* HitPawn = Cast<APawn>(HitResult.GetActor()))
+		{
+			if (UThroneFunctionLibrary::IsTargetPawnHostile(OwningPawn, HitPawn))
+			{
+				FActiveGameplayEffectHandle ActiveGameplayEffectHandle = NativeApplyEffectSpecHandleToTarget(HitPawn, InSpecHandle);
+				
+				if (ActiveGameplayEffectHandle.WasSuccessfullyApplied())
+				{
+					FGameplayEventData Data;
+					Data.Instigator = OwningPawn;
+					Data.Target = HitPawn;
+					
+					UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(HitPawn, ThroneGameplayTags::Shared_Event_HitReact, Data);
+				}
+			}
+		}
+	}
 }
