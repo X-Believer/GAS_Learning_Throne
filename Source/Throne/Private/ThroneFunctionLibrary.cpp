@@ -223,8 +223,6 @@ void UThroneFunctionLibrary::SaveCurrentGameDifficulty(EThroneGameDifficulty InG
 	{
 		SaveGame->SavedCurrentGameDifficulty = InGameDifficulty;
 		const bool bWasSaved = UGameplayStatics::SaveGameToSlot(SaveGame, ThroneGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
-		
-		Debug::Print(FString::Printf(TEXT("Save Game Difficulty %s"), bWasSaved ? TEXT("Success") : TEXT("Failed")));
 	}
 }
 
@@ -236,8 +234,6 @@ bool UThroneFunctionLibrary::TryLoadSavedGameDifficulty(EThroneGameDifficulty& O
 		if (const UThroneSaveGame* ThroneSaveGame = Cast<UThroneSaveGame>(SaveGame))
 		{
 			OutGameDifficulty = ThroneSaveGame->SavedCurrentGameDifficulty;
-			
-			Debug::Print(FString::Printf(TEXT("Load Saved Game Difficulty Success: %s"), *UEnum::GetValueAsString(OutGameDifficulty)));
 			return true;
 		}
 	}
