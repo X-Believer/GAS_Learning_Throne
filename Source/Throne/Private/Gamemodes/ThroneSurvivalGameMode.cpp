@@ -1,8 +1,8 @@
 // Copyright (c) 2026 Shuyang Xing. All rights reserved.
 
-
 #include "Gamemodes/ThroneSurvivalGameMode.h"
 #include "NavigationSystem.h"
+#include "ThroneFunctionLibrary.h"
 #include "Characters/ThroneEnemyCharacter.h"
 #include "Engine/AssetManager.h"
 #include "Engine/TargetPoint.h"
@@ -17,6 +17,18 @@ void AThroneSurvivalGameMode::RegisterSpawnedEnemies(const TArray<AThroneEnemyCh
 			Enemy->OnDestroyed.AddUniqueDynamic(this, &AThroneSurvivalGameMode::OnEnemyDestroyed);
 			CurrentSpawnedEnemiesCounter++;
 		}
+	}
+}
+
+void AThroneSurvivalGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+	
+	EThroneGameDifficulty SavedDifficulty;
+	
+	if (UThroneFunctionLibrary::TryLoadSavedGameDifficulty(SavedDifficulty))
+	{
+		CurrentGameDifficulty = SavedDifficulty;
 	}
 }
 

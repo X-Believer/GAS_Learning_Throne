@@ -44,3 +44,10 @@ enum class EThroneGameDifficulty : uint8
 	Hard,
 	Brutal
 };
+
+UENUM(BlueprintType)
+enum class EThroneInputMode : uint8
+{
+	GameOnly,
+	UIOnly
+};

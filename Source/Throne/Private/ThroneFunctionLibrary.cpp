@@ -5,10 +5,14 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "GenericTeamAgentInterface.h"
+#include "ThroneDebugHelper.h"
+#include "ThroneGameInstance.h"
 #include "ThroneGameplayTags.h"
 #include "AbilitySystem/ThroneAbilitySystemComponent.h"
 #include "Characters/ThroneBaseCharacter.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "SaveGame/ThroneSaveGame.h"
 #include "ThroneTypes/ThroneCountdownAction.h"
 
 UThroneAbilitySystemComponent* UThroneFunctionLibrary::NativeGetThroneASCFromActor(AActor* InActor)
@@ -171,4 +175,71 @@ void UThroneFunctionLibrary::Countdown(const UObject* WorldContextObject, float 
 			FoundAction->CancelAction();
 		}
 	}
+}
+
+UThroneGameInstance* UThroneFunctionLibrary::GetThroneGameInstance(const UObject* WorldContextObject)
+{
+	if (GEngine)
+	{
+		if (const UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+		{
+			return Cast<UThroneGameInstance>(World->GetGameInstance());
+		}
+	}
+	return nullptr;
+}
+
+void UThroneFunctionLibrary::ToggleInputMode(const UObject* WorldContextObject, EThroneInputMode NewInputMode)
+{
+	if (GEngine)
+	{
+		if (const UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+		{
+			if (APlayerController* PlayerController = World->GetFirstPlayerController())
+			{
+				switch (NewInputMode)
+				{
+				case EThroneInputMode::GameOnly:
+					PlayerController->SetInputMode(FInputModeGameOnly());
+					PlayerController->bShowMouseCursor = false;
+					break;
+				case EThroneInputMode::UIOnly:
+					PlayerController->SetInputMode(FInputModeUIOnly());
+					PlayerController->bShowMouseCursor = true;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+}
+
+void UThroneFunctionLibrary::SaveCurrentGameDifficulty(EThroneGameDifficulty InGameDifficulty)
+{
+	USaveGame* SaveGameObject = UGameplayStatics::CreateSaveGameObject(UThroneSaveGame::StaticClass());
+	
+	if (UThroneSaveGame* SaveGame = Cast<UThroneSaveGame>(SaveGameObject))
+	{
+		SaveGame->SavedCurrentGameDifficulty = InGameDifficulty;
+		const bool bWasSaved = UGameplayStatics::SaveGameToSlot(SaveGame, ThroneGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
+		
+		Debug::Print(FString::Printf(TEXT("Save Game Difficulty %s"), bWasSaved ? TEXT("Success") : TEXT("Failed")));
+	}
+}
+
+bool UThroneFunctionLibrary::TryLoadSavedGameDifficulty(EThroneGameDifficulty& OutGameDifficulty)
+{
+	if (UGameplayStatics::DoesSaveGameExist(ThroneGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0))
+	{
+		USaveGame* SaveGame = UGameplayStatics::LoadGameFromSlot(ThroneGameplayTags::GameData_SaveGame_Slot_1.GetTag().ToString(), 0);
+		if (const UThroneSaveGame* ThroneSaveGame = Cast<UThroneSaveGame>(SaveGame))
+		{
+			OutGameDifficulty = ThroneSaveGame->SavedCurrentGameDifficulty;
+			
+			Debug::Print(FString::Printf(TEXT("Load Saved Game Difficulty Success: %s"), *UEnum::GetValueAsString(OutGameDifficulty)));
+			return true;
+		}
+	}
+	return false;
 }

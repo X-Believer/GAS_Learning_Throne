@@ -98,4 +98,10 @@ namespace ThroneGameplayTags
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Status_HitReact_Right);
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Status_HitReact_Back);
 	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Status_Invincible);
+	
+	/* Game Data Tags*/
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_Level_SurvivalGameModeMap);
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_Level_MainMenuMap);
+	
+	THRONE_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameData_SaveGame_Slot_1);
 }

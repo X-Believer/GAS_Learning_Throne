@@ -7,6 +7,7 @@
 #include "ThroneTypes/ThroneEnumTypes.h"
 #include "ThroneFunctionLibrary.generated.h"
 
+class UThroneGameInstance;
 struct FGameplayEffectSpecHandle;
 struct FScalableFloat;
 class UPawnCombatComponent;
@@ -57,4 +58,16 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Throne|FunctionLibrary", meta=(Latent, WorldContext="WorldContextObject", LatentInfo="LatentInfo", ExpandEnumAsExecs="CountdownInput|CountdownOutput", TotalTime="1.0", UpdateInterval="0.1"))
 	static void Countdown(const UObject* WorldContextObject, float TotalTime, float UpdateInterval, float& OutRemainingTime, EThroneCountdownActionInput CountdownInput, UPARAM(DisplayName="Output") EThroneCountdownActionOutput& CountdownOutput, FLatentActionInfo LatentInfo);
+	
+	UFUNCTION(BlueprintPure, Category = "Throne|FunctionLibrary", meta=(WorldContext="WorldContextObject"))
+	static UThroneGameInstance* GetThroneGameInstance(const UObject* WorldContextObject);
+	
+	UFUNCTION(BlueprintCallable, Category = "Throne|FunctionLibrary", meta=(WorldContext="WorldContextObject"))
+	static void ToggleInputMode(const UObject* WorldContextObject, EThroneInputMode NewInputMode);
+	
+	UFUNCTION(BlueprintCallable, Category = "Throne|FunctionLibrary")
+	static void SaveCurrentGameDifficulty(EThroneGameDifficulty InGameDifficulty);
+	
+	UFUNCTION(BlueprintCallable, Category = "Throne|FunctionLibrary")
+	static bool TryLoadSavedGameDifficulty(EThroneGameDifficulty& OutGameDifficulty);
 };
